@@ -38,7 +38,7 @@ async def get_messages(
     key = "chat_messages"
     end = start + count - 1
     messages = await redis_pool_messages.lrange(key, start, end)
-    return [json.loads(message) for message in reversed(messages)]
+    return [json.loads(message) for message in messages]
 
 
 # async def get_messages(redis_pool_messages: Redis, last_message_id: int = None, count: int = 20) -> List[dict]:

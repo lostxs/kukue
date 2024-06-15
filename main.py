@@ -15,6 +15,9 @@ app = FastAPI()
 origins = [
     "http://localhost",
     "http://localhost:3000",
+    "http://kuzyaka.ru",
+    "http://147.45.159.58",
+    "http://147.45.159.58:3000",
 ]
 
 app.add_middleware(
@@ -26,9 +29,9 @@ app.add_middleware(
 )
 
 main_api_router = APIRouter()
-main_api_router.include_router(user_router, prefix="/user", tags=["user"])
-main_api_router.include_router(auth_router, prefix="/auth", tags=["authentication"])
-main_api_router.include_router(message_router, prefix="/messages", tags=["messages"])
+main_api_router.include_router(user_router, prefix="/api/user", tags=["user"])
+main_api_router.include_router(auth_router, prefix="/api/auth", tags=["authentication"])
+main_api_router.include_router(message_router, prefix="/api/messages", tags=["messages"])
 app.include_router(main_api_router)
 
 

@@ -27,7 +27,7 @@ async def get_chat_token(user=Depends(get_current_user)):
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found or not authenticated")
     chat_token = await create_chat_token(user.user_id, user.username)
-    return JSONResponse({"chat_token": chat_token})
+    return JSONResponse({"chat_token": chat_token, "username": user.username})
 
 
 @message_router.websocket("/ws")

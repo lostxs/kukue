@@ -55,14 +55,13 @@ async def login_for_access_token(
     session = await create_access_token(
         user_id=user.user_id,
         expires_delta=access_token_expires,
-        # additional_claims={"username": user.username}
     )
     response.set_cookie(
         key="session",
         value=session,
         httponly=True,
-        secure=True,
-        samesite="none"
+        secure=False,
+        samesite="lax"
     )
     return {"message": "Authentication successful"}
 
@@ -101,8 +100,6 @@ async def websocket_endpoint(
         return
 
     await websocket.send_json({"type": "AUTH_STATUS", "isAuthenticated": True})
-    # await websocket.send_json({"type": "AUTH_STATUS", "isAuthenticated": True, "user": {"id": str(user_id)}})
-    # logger.info(f"User {user_id} connected via websocket.")
     log_connection(websocket, endpoint="auth", user_id=str(user_id), action="connected")
     session_task = asyncio.create_task(maintain_session(websocket, cookie_or_token, redis_auth))
 
@@ -116,7 +113,6 @@ async def websocket_endpoint(
                 break
 
             await websocket.send_json({"type": "message", "message": "Session is active"})
-            # logger.info("Message received from user_id={}: {}".format(user_id, message))
     except WebSocketDisconnect:
         log_connection(websocket, endpoint="auth", user_id=str(user_id), action="disconnected")
         session_task.cancel()

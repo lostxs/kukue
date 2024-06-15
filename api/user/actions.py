@@ -57,7 +57,7 @@ async def _create_new_user(body: UserCreate, session) -> ShowUser:
             await store_job_id(user.user_id, job.id)
 
             return ShowUser(
-                # user_id=user.user_id,
+                user_id=user.user_id,
                 username=user.username,
                 email=user.email,
                 is_active=user.is_active,

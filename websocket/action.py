@@ -19,6 +19,12 @@ async def handle_messages(websocket, user, db, redis_messages):
         elif action == "load_more_messages":
             await load_more_messages(websocket, redis_messages)
 
+        elif action == "typing":
+            await manager.broadcast_typing_status(user.username, websocket, is_typing=True)
+
+        elif action == "stop_typing":
+            await manager.broadcast_typing_status(user.username, websocket, is_typing=False)
+
 
 async def load_more_messages(websocket, redis_messages):
     current_index = manager.last_message_index[websocket]
@@ -34,7 +40,7 @@ async def load_more_messages(websocket, redis_messages):
 
 async def handle_websocket_disconnect(user, websocket, db):
     await manager.disconnect(websocket, db)
-    leave_message = f"Client #{user.username} left the chat."
+    leave_message = f"User {user.username} left the chat."
     await manager.broadcast_message(
         leave_message, user.username, websocket, system_message=True
     )
@@ -42,7 +48,7 @@ async def handle_websocket_disconnect(user, websocket, db):
 
 async def handle_websocket_connect(user, websocket, db, redis_messages):
     await manager.connect(websocket, user, db, redis_messages)
-    join_message = f"Client #{user.username} joined the chat."
+    join_message = f"User {user.username} joined the chat."
     await manager.broadcast_message(
         join_message, user.username, websocket, system_message=True
     )

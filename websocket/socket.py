@@ -124,6 +124,22 @@ class ConnectionManager:
             if connection != sender_websocket:
                 await connection.send_text(json.dumps(message_data, ensure_ascii=False))
 
+    async def broadcast_typing_status(
+        self,
+        username: str,
+        sender_websocket: WebSocket,
+        is_typing: bool
+    ):
+        message_type = "typing" if is_typing else "stop_typing"
+    
+        message_data = {
+            "username": username,
+            "type": message_type,
+        }
+        for connection in self.active_connections:
+            if connection != sender_websocket:
+                await connection.send_text(json.dumps(message_data, ensure_ascii=False))
+
 
 # def sanitize(text):
 #    return html.escape(text)

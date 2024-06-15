@@ -17,16 +17,16 @@ class TunedModel(BaseModel):
 
 
 class ShowUser(TunedModel):
-    # user_id: uuid.UUID
+    user_id: uuid.UUID
     username: str
     email: EmailStr
     is_active: bool
 
 
 class UserCreate(BaseModel):
-    username: constr(min_length=1, max_length=50)
+    username: constr(min_length=1, max_length=50) # type: ignore
     email: EmailStr
-    password: constr(min_length=6)
+    password: constr(min_length=6) # type: ignore
 
 
 class ActivationCodeData(BaseModel):

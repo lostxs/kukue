@@ -4,6 +4,7 @@ import random
 from typing import cast
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from sqlalchemy import ColumnElement
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from db.models import ActivationCode
